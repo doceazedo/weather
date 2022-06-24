@@ -35,6 +35,12 @@ const ForecastWrapper = styled.div`
   display: flex;
   margin-bottom: 1.5rem;
   gap: 1rem;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    padding: 1px 1.5rem;
+    overflow-x: auto;
+  }
 `;
 
 const ForecastItem = styled.div<ForecastItemProps>`
@@ -58,6 +64,10 @@ const ForecastItem = styled.div<ForecastItemProps>`
   }
 
   ${({ active }) => active && ForecastItemActive}
+
+  @media screen and (max-width: 768px) {
+    flex-shrink: 0;
+  }
 `;
 
 const ForecastItemActive = css`
