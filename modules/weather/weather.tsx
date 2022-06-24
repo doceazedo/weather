@@ -24,6 +24,8 @@ type WeatherIcons = {
   [key: string]: JSX.Element;
 }
 
+const unit = 'C';
+
 const weatherIcons: WeatherIcons = {
   'clear sky': <SunIcon />,
   'few clouds': <SunBehindCloudIcon />,
@@ -55,6 +57,12 @@ const getWeekday = (dt: number) => {
   return weekdays[date.getDay()];
 }
 
+const getWeatherIcon = (key: string) =>
+  weatherIcons?.[key] || <SunBehindCloudIcon />;
+
+const getMinMaxTemps = (min: number, max: number) =>
+  `${Math.floor(min)}º${unit} - ${Math.ceil(max)}º${unit}`;
+
 const updateWeather = (setLocation: (location: Location) => void, refetch?: () => void) => {
   navigator.geolocation.getCurrentPosition((pos) => {
     setLocation({
@@ -76,8 +84,8 @@ export const WeatherPage = () => {
   const current = data?.list?.[currentWeekday];
   const forecast = data?.list?.map((forecast, i) => ({
     weekday: getWeekday(forecast.dt),
-    icon: weatherIcons?.[forecast.weather?.[0]?.description] || <SunBehindCloudIcon />,
-    temperatures: `${Math.round(forecast.main.temp_min)}ºC - ${Math.round(forecast.main.temp_max)}ºC`,
+    icon: getWeatherIcon(forecast.weather?.[0]?.description),
+    temperatures: getMinMaxTemps(forecast.main.temp_min, forecast.main.temp_max),
     active: i == currentWeekday,
     setCurrent: () => setWeekday(i),
   })) || [];
@@ -86,7 +94,7 @@ export const WeatherPage = () => {
     <>
       <Weather
         temperature={Math.round(current?.main?.temp || 0)}
-        unit="C"
+        unit={unit}
         location={region}
         feelsLike={Math.round(current?.main?.feels_like || 0)}
         rain={current?.rain?.['3h'] || 0}

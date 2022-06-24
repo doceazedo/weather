@@ -135,7 +135,7 @@ const handler = async (
     if (monthDate == lastDate) return null;
     lastDate = monthDate;
     return forecast;
-  })?.filter<List>(isNotNullOrUndefined);
+  })?.filter(isNotNullOrUndefined);
 
   res.status(200).json(data);
 }
