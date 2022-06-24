@@ -94,6 +94,8 @@ const baseUrl = 'https://api.openweathermap.org/data/2.5'
 const apiKey = process.env.OPENWEATHER_API_KEY || '';
 const units = 'metric';
 
+const isNotNullOrUndefined = <T extends Object>(input: null | undefined | T): input is T => input != null;
+
 const getApiUrl = (endpoint: string, lat: number, lon: number) => {
   const url = new URL(`${baseUrl}${endpoint}`);
   url.searchParams.append('units', units);
@@ -133,7 +135,7 @@ const handler = async (
     if (monthDate == lastDate) return null;
     lastDate = monthDate;
     return forecast;
-  })?.filter((forecast) => !!forecast);
+  })?.filter<List>(isNotNullOrUndefined);
 
   res.status(200).json(data);
 }
