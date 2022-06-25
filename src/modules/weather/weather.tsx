@@ -48,12 +48,11 @@ const weekdays = [
   'Sábado'
 ];
 
-const getWeekday = (dt: number) => {
-  const now = new Date();
-  const date = new Date(0);
-  date.setUTCSeconds(dt);
-  if (date.getDate() == now.getDate()) return 'Hoje';
-  if (date.getDate() == now.getDate() + 1) return 'Amanhã';
+const getWeekday = (i: number) => {
+  if (i == 0) return 'Hoje';
+  if (i == 1) return 'Amanhã';
+  const date = new Date();
+  date.setDate(date.getDate() + i);
   return weekdays[date.getDay()];
 }
 
@@ -83,7 +82,7 @@ export const WeatherPage = () => {
   const region = data ? `${data.city.name}, ${data.city.country}` : '[...]';
   const current = data?.list?.[currentWeekday];
   const forecast = data?.list?.map((forecast, i) => ({
-    weekday: getWeekday(forecast.dt),
+    weekday: getWeekday(i),
     icon: getWeatherIcon(forecast.weather?.[0]?.description),
     temperatures: getMinMaxTemps(forecast.main.temp_min, forecast.main.temp_max),
     active: i == currentWeekday,
