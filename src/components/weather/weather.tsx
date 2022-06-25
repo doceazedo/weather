@@ -11,7 +11,7 @@ type WeatherProps = {
 
 export const Weather = (props: WeatherProps) => {
   return (
-    <WeatherWrapper>
+    <WeatherWrapper data-testid="weather-wrapper">
       <Temperature>
         <TemperatureText>
           {props.temperature}
