@@ -4,7 +4,7 @@ import { RefreshIcon } from '../icons';
 import { Button } from './button';
 
 type ButtonReloadProps = {
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 type ButtonStyledProps = {
@@ -19,7 +19,7 @@ export const ButtonReload = (props: ButtonReloadProps) => {
       deg={rotation}
       onClick={() => {
         setRotation(rotation - 360);
-        props.onClick();
+        if (!!props.onClick) props?.onClick();
       }}
     >
       <RefreshIcon />

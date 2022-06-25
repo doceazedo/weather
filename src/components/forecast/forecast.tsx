@@ -6,7 +6,7 @@ type ForecastItemProps = {
   active: boolean;
 };
 
-type Forecast = {
+export type Forecast = {
   weekday: string;
   icon: ReactNode;
   temperatures: string;
