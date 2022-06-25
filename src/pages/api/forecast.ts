@@ -11,32 +11,32 @@ type Main = {
   grnd_level: number;
   humidity: number;
   temp_kf: number;
-}
+};
 
 type Weather = {
   id: number;
   main: string;
   description: string;
   icon: string;
-}
+};
 
 type Clouds = {
   all: number;
-}
+};
 
 type Wind = {
   speed: number;
   deg: number;
   gust: number;
-}
+};
 
 type Rain = {
   '3h': number;
-}
+};
 
 type Sys = {
   pod: string;
-}
+};
 
 type List = {
   dt: number;
@@ -49,12 +49,12 @@ type List = {
   rain: Rain;
   sys: Sys;
   dt_txt: string;
-}
+};
 
 type Coord = {
   lat: number;
   lon: number;
-}
+};
 
 type City = {
   id: number;
@@ -65,7 +65,7 @@ type City = {
   timezone: number;
   sunrise: number;
   sunset: number;
-}
+};
 
 export type ForecastResponse = {
   cod: string;
@@ -73,7 +73,7 @@ export type ForecastResponse = {
   cnt: number;
   list: List[];
   city: City;
-}
+};
 
 export type WeatherResponse = {
   coord: Coord;
@@ -88,13 +88,15 @@ export type WeatherResponse = {
   id: number;
   name: string;
   cod: number;
-}
+};
 
-const baseUrl = 'https://api.openweathermap.org/data/2.5'
+const baseUrl = 'https://api.openweathermap.org/data/2.5';
 const apiKey = process.env.OPENWEATHER_API_KEY || '';
 const units = 'metric';
 
-const isNotNullOrUndefined = <T extends Object>(input: null | undefined | T): input is T => input != null;
+const isNotNullOrUndefined = <T extends Object>(
+  input: null | undefined | T,
+): input is T => input != null;
 
 const getApiUrl = (endpoint: string, lat: number, lon: number) => {
   const url = new URL(`${baseUrl}${endpoint}`);
@@ -103,7 +105,7 @@ const getApiUrl = (endpoint: string, lat: number, lon: number) => {
   url.searchParams.append('lon', `${lon}`);
   url.searchParams.append('appid', apiKey);
   return url.href;
-}
+};
 
 const getForecast = async (lat: number, lon: number) => {
   const href = getApiUrl('/forecast', lat, lon);
@@ -114,11 +116,11 @@ const getForecast = async (lat: number, lon: number) => {
   } catch (error) {
     return null;
   }
-}
+};
 
 const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<ForecastResponse>
+  res: NextApiResponse<ForecastResponse>,
 ) => {
   const lat = parseFloat(`${req.query?.lat}`);
   const lon = parseFloat(`${req.query?.lon}`);
@@ -128,16 +130,18 @@ const handler = async (
   if (data == null) return res.status(500);
 
   let lastDate = 0;
-  data.list = data?.list?.map((forecast) => {
-    const date = new Date(0);
-    date.setUTCSeconds(forecast.dt);
-    const monthDate = date.getDate();
-    if (monthDate == lastDate) return null;
-    lastDate = monthDate;
-    return forecast;
-  })?.filter(isNotNullOrUndefined);
+  data.list = data?.list
+    ?.map((forecast) => {
+      const date = new Date(0);
+      date.setUTCSeconds(forecast.dt);
+      const monthDate = date.getDate();
+      if (monthDate == lastDate) return null;
+      lastDate = monthDate;
+      return forecast;
+    })
+    ?.filter(isNotNullOrUndefined);
 
   res.status(200).json(data);
-}
+};
 
 export default handler;

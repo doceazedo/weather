@@ -5,21 +5,27 @@ import { Button } from './button';
 
 type ButtonReloadProps = {
   onClick: () => void;
-}
+};
 
 type ButtonStyledProps = {
   deg: number;
-}
+};
 
 export const ButtonReload = (props: ButtonReloadProps) => {
-  const [ rotation, setRotation ] = useState(0);
+  const [rotation, setRotation] = useState(0);
 
   return (
-    <ButtonStyled deg={rotation} onClick={() => { setRotation(rotation - 360); props.onClick(); }}>
+    <ButtonStyled
+      deg={rotation}
+      onClick={() => {
+        setRotation(rotation - 360);
+        props.onClick();
+      }}
+    >
       <RefreshIcon />
     </ButtonStyled>
-  )
-}
+  );
+};
 
 export const ButtonStyled = styled(Button)<ButtonStyledProps>`
   display: flex;
@@ -31,6 +37,6 @@ export const ButtonStyled = styled(Button)<ButtonStyledProps>`
     width: 1.5rem;
     height: 1.5rem;
     transform: rotate(${({ deg }) => deg}deg);
-    transition: all .5s ease;
+    transition: all 0.5s ease;
   }
 `;

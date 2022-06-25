@@ -11,18 +11,18 @@ import {
   SunBehindCloudIcon,
   SunBehindLargeCloudIcon,
   SunBehindRainIcon,
-  SunIcon
+  SunIcon,
 } from '../../components/icons';
 import { useForecast } from './weather.store';
 
 type Location = {
   lat: number;
   lon: number;
-}
+};
 
 type WeatherIcons = {
   [key: string]: JSX.Element;
-}
+};
 
 const unit = 'C';
 
@@ -32,11 +32,11 @@ const weatherIcons: WeatherIcons = {
   'scattered clouds': <SunBehindLargeCloudIcon />,
   'broken clouds': <CloudIcon />,
   'shower rain': <RainIcon />,
-  'rain': <SunBehindRainIcon />,
-  'thunderstorm': <CloudLightningIcon />,
-  'snow': <SnowIcon />,
-  'mist': <FogIcon />,
-}
+  rain: <SunBehindRainIcon />,
+  thunderstorm: <CloudLightningIcon />,
+  snow: <SnowIcon />,
+  mist: <FogIcon />,
+};
 
 const weekdays = [
   'Domingo',
@@ -45,7 +45,7 @@ const weekdays = [
   'Quarta',
   'Quinta',
   'Sexta',
-  'Sábado'
+  'Sábado',
 ];
 
 const getWeekday = (i: number) => {
@@ -54,7 +54,7 @@ const getWeekday = (i: number) => {
   const date = new Date();
   date.setDate(date.getDate() + i);
   return weekdays[date.getDay()];
-}
+};
 
 const getWeatherIcon = (key: string) =>
   weatherIcons?.[key] || <SunBehindCloudIcon />;
@@ -62,32 +62,39 @@ const getWeatherIcon = (key: string) =>
 const getMinMaxTemps = (min: number, max: number) =>
   `${Math.floor(min)}º${unit} - ${Math.ceil(max)}º${unit}`;
 
-const updateWeather = (setLocation: (location: Location) => void, refetch?: () => void) => {
+const updateWeather = (
+  setLocation: (location: Location) => void,
+  refetch?: () => void,
+) => {
   navigator.geolocation.getCurrentPosition((pos) => {
     setLocation({
       lat: pos.coords.latitude,
-      lon: pos.coords.longitude
+      lon: pos.coords.longitude,
     });
   });
   if (refetch) refetch();
-}
+};
 
 export const WeatherPage = () => {
-  const [ location, setLocation ] = useState<Location>();
-  const [ currentWeekday, setWeekday ] = useState(0);
+  const [location, setLocation] = useState<Location>();
+  const [currentWeekday, setWeekday] = useState(0);
   const { data, refetch } = useForecast(location);
 
   useEffect(() => updateWeather(setLocation), [setLocation]);
 
   const region = data ? `${data.city.name}, ${data.city.country}` : '[...]';
   const current = data?.list?.[currentWeekday];
-  const forecast = data?.list?.map((forecast, i) => ({
-    weekday: getWeekday(i),
-    icon: getWeatherIcon(forecast.weather?.[0]?.description),
-    temperatures: getMinMaxTemps(forecast.main.temp_min, forecast.main.temp_max),
-    active: i == currentWeekday,
-    setCurrent: () => setWeekday(i),
-  })) || [];
+  const forecast =
+    data?.list?.map((forecast, i) => ({
+      weekday: getWeekday(i),
+      icon: getWeatherIcon(forecast.weather?.[0]?.description),
+      temperatures: getMinMaxTemps(
+        forecast.main.temp_min,
+        forecast.main.temp_max,
+      ),
+      active: i == currentWeekday,
+      setCurrent: () => setWeekday(i),
+    })) || [];
 
   return (
     <>
@@ -102,5 +109,5 @@ export const WeatherPage = () => {
       <Forecast forecast={forecast} />
       <ButtonReload onClick={() => updateWeather(setLocation, refetch)} />
     </>
-  )
-}
+  );
+};

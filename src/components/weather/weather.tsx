@@ -7,23 +7,28 @@ type WeatherProps = {
   feelsLike: number;
   rain: number;
   chance: number;
-}
+};
 
 export const Weather = (props: WeatherProps) => {
   return (
     <WeatherWrapper>
       <Temperature>
-        <TemperatureText>{props.temperature}<small>º{props.unit}</small></TemperatureText>
+        <TemperatureText>
+          {props.temperature}
+          <small>º{props.unit}</small>
+        </TemperatureText>
         <LocationText>{props.location}</LocationText>
       </Temperature>
       <WeatherDataList>
-        <li>Sensação térmica: {props.feelsLike}º{props.unit}</li>
+        <li>
+          Sensação térmica: {props.feelsLike}º{props.unit}
+        </li>
         <li>Precipitação: {props.rain}mm</li>
         <li>Chance de chuva: {props.chance}%</li>
       </WeatherDataList>
     </WeatherWrapper>
-  )
-}
+  );
+};
 
 const WeatherWrapper = styled.div`
   display: flex;
@@ -36,7 +41,7 @@ const WeatherWrapper = styled.div`
   @media screen and (max-width: 768px) {
     gap: 1.5rem;
   }
-`
+`;
 
 const Temperature = styled.div`
   display: flex;
@@ -74,13 +79,13 @@ const WeatherDataList = styled.ul`
   li:not(:last-child)::after {
     content: '•';
     margin: 0 1rem;
-    opacity: .75;
+    opacity: 0.75;
   }
 
   @media screen and (max-width: 768px) {
     flex-wrap: wrap;
     justify-content: center;
-    gap: .25rem 1rem;
+    gap: 0.25rem 1rem;
     font-size: 1rem;
 
     li::after {

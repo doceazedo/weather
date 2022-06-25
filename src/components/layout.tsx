@@ -3,8 +3,8 @@ import styled from '@emotion/styled';
 import type { ReactNode } from 'react';
 
 type LayoutProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 const Layout = (props: LayoutProps) => {
   return (
@@ -15,8 +15,8 @@ const Layout = (props: LayoutProps) => {
       </Head>
       <Container>{props.children}</Container>
     </>
-  )
-}
+  );
+};
 
 const Container = styled.main`
   display: flex;
