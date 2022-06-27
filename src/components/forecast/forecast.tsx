@@ -42,7 +42,8 @@ const ForecastWrapper = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding: 1px 1.5rem;
+    padding: 1.5rem;
+    margin: 0;
     overflow-x: auto;
   }
 `;
